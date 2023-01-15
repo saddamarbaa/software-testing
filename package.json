@@ -1,0 +1,30 @@
+{
+  "name": "software-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "format": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saddamarbaa/software-testing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saddamarbaa/software-testing/issues"
+  },
+  "homepage": "https://github.com/saddamarbaa/software-testing#readme",
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3"
+  }
+}
