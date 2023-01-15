@@ -5,4 +5,8 @@ function sum(a, b) {
 function greeting(name) {
   return `Hello ${name}!`;
 }
-module.exports = { sum, greeting };
+
+function isEven(number) {
+  return number % 2 === 0 ? true : false;
+}
+module.exports = { sum, greeting, isEven };

@@ -1,4 +1,4 @@
-const { sum, greeting } = require('../../src/utils/index');
+const { sum, greeting, isEven } = require('../../src/utils/index');
 
 test('adds 1 + 2 to equal 3', () => {
   expect(sum(1, 2)).toBe(3);
@@ -20,7 +20,6 @@ test('two plus two', () => {
 // Testing floating number
 test('adding floating point numbers', () => {
   const value = 0.1 + 0.2;
-
   expect(value).toBeLessThan(2);
   expect(value).toBeGreaterThan(0.2);
   //This won't work because of rounding error
@@ -35,4 +34,37 @@ test('greeting it should return Hello Saddam', () => {
   expect(greeting('am')).toMatch(/Hello am/);
   expect(greeting('Saddam')).toBe('Hello Saddam!');
   expect(greeting('Saddam')).toMatch(/^Hello Saddam!$/); // exact match
+});
+
+// Testing Truthiness
+test('isEven Should return tru for 4', () => {
+  const result = isEven(4);
+  expect(result).toBeTruthy();
+  expect(result).not.toBeFalsy();
+});
+
+test('isEven Should return false for 5', () => {
+  const result = isEven(5);
+  expect(result).toBeFalsy();
+  expect(result).not.toBeTruthy();
+});
+
+describe('Validation', () => {
+  test('it Should return null', () => {
+    const n = null;
+    expect(n).toBeNull();
+    expect(n).toBeDefined();
+    expect(n).not.toBeUndefined();
+    expect(n).not.toBeTruthy();
+    expect(n).toBeFalsy();
+  });
+
+  test('it Should return zero', () => {
+    const z = 0;
+    expect(z).not.toBeNull();
+    expect(z).toBeDefined();
+    expect(z).not.toBeUndefined();
+    expect(z).not.toBeTruthy();
+    expect(z).toBeFalsy();
+  });
 });
