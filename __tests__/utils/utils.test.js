@@ -1,4 +1,10 @@
-const { sum, greeting, isEven, getShoppingList } = require('../../src/utils/index');
+const { sum, greeting, isEven, getShoppingList, getOrderById } = require('../../src/utils/index');
+
+describe('Test Health check', () => {
+  test('it should check the testing setup and test success', () => {
+    expect('Saddam').toBe('Saddam');
+  });
+});
 
 // Testing numbers
 describe('Sum', () => {
@@ -90,5 +96,36 @@ describe('ShoppingList', () => {
 
   it('It has trash bags on it', () => {
     expect(new Set(shoppingList)).toContain('trash bags');
+  });
+});
+
+// Testing Object and Throw error
+describe('getOrderById', () => {
+  it('Should return order of  id 10', () => {
+    expect(getOrderById(10)).toStrictEqual({ id: 10, price: 10, name: 'Book' });
+  });
+
+  it('Should return order of  id 3', () => {
+    expect(getOrderById(3)).toEqual({ id: 3, price: 10, name: 'Book' });
+  });
+
+  it('Should return order of  id 11', () => {
+    expect(getOrderById(11)).toMatchObject({ id: 11, price: 10 });
+  });
+
+  it('Should return order of id 12', () => {
+    expect(getOrderById(12)).toHaveProperty('price', 10);
+  });
+
+  it('Should throws error if id is not defined', () => {
+    expect(() => {
+      return getOrderById();
+    }).toThrow();
+  });
+
+  it('Should throws error if id is not defined with message "id is not defined with message"', () => {
+    expect(() => {
+      return getOrderById();
+    }).toThrow('id is not defined');
   });
 });
