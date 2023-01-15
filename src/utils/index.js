@@ -1,12 +1,9 @@
-function sum(a, b) {
-  return a + b;
-}
+const sum = (a, b) => a + b;
 
-function greeting(name) {
-  return `Hello ${name}!`;
-}
+const greeting = (name) => `Hello ${name}!`;
 
-function isEven(number) {
-  return number % 2 === 0 ? true : false;
-}
-module.exports = { sum, greeting, isEven };
+const isEven = (number) => (number % 2 === 0 ? true : false);
+
+const getShoppingList = () => ['diapers', 'kleenex', 'trash bags', 'paper towels', 'milk'];
+
+module.exports = { sum, greeting, isEven, getShoppingList };
