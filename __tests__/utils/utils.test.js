@@ -1,4 +1,19 @@
-const { sum, greeting, isEven, getShoppingList, getOrderById } = require('../../src/utils/index');
+const { default: axios } = require('axios');
+
+const db = require('../../src/modal/db');
+
+jest.mock('axios');
+
+const {
+  sum,
+  greeting,
+  isEven,
+  getShoppingList,
+  getOrderById,
+  getOrders,
+  applyDiscount,
+  fetchData,
+} = require('../../src/utils/index');
 
 describe('Test Health check', () => {
   test('it should check the testing setup and test success', () => {
@@ -127,5 +142,121 @@ describe('getOrderById', () => {
     expect(() => {
       return getOrderById();
     }).toThrow('id is not defined');
+  });
+});
+
+// Testing Asynchronous Code
+describe('getOrders', () => {
+  it('Should return some orders', async () => {
+    const orders = await getOrders();
+    expect(orders.length).toBeGreaterThan(0);
+  });
+
+  it('Should fails with an error', async () => {
+    try {
+      await getOrders();
+    } catch (e) {
+      expect(e).toMatch('error');
+    }
+  });
+
+  it('Should return some orders on resolve', async () => {
+    await expect(getOrders()).resolves.toContainEqual({
+      id: 81,
+      price: 181,
+    });
+  });
+
+  // it('Should throw error on reject', async () => {
+  //   await expect(getOrders()).reject.toMatch('error');
+  // });
+});
+
+// Mock Functions with pure javascript (not recommended)
+describe('applyDiscount', () => {
+  // Mock the getOrder function
+  // this abroach over write the ordinal function on all files
+  db.getOrder = function () {
+    return {
+      id: 10,
+      price: 100,
+    };
+  };
+
+  test('it should apply discount 10% for order with price 10', () => {
+    const order = applyDiscount(10);
+    expect(order).toEqual({
+      id: 10,
+      price: 10,
+    });
+  });
+});
+
+// Mock Functions with jest (recommended)
+describe('applyDiscount', () => {
+  const mockFn = jest
+    .fn()
+    .mockReturnValue('default')
+    .mockReturnValueOnce('first call')
+    .mockReturnValueOnce('second call');
+
+  console.log(mockFn()); // 'first call'
+  console.log(mockFn()); // 'second call'
+  console.log(mockFn()); // 'default'
+  console.log(mockFn()); // 'default'
+
+  db.getOrder = jest
+    .fn()
+    .mockReturnValue({
+      id: 10,
+      price: 100,
+    })
+    .mockReturnValueOnce({
+      id: 10,
+      price: 100,
+    });
+
+  const order = applyDiscount(10);
+  expect(order).toEqual({
+    id: 10,
+    price: 10,
+  });
+  expect(db.getOrder.mock.calls[0][0]).toBe(10);
+
+  console.log(db.getOrder.mock.calls[0][0]);
+  // Rest the mocked function to it ordinal code
+  // db.getOrder.mockReset();
+});
+
+// Functions mock implementation
+describe('applyDiscount', () => {
+  db.getOrder = jest.fn().mockImplementation((id) => {
+    if (id < 5) {
+      return { id: id, price: 10 * 0.1 };
+    }
+    return { id: id, price: 100 };
+  });
+
+  const order = applyDiscount(10);
+  expect(order).toEqual({
+    id: 10,
+    price: 10,
+  });
+  expect(db.getOrder.mock.calls[0][0]).toBe(10);
+
+  // Rest the mocked function to it ordinal code
+  // db.getOrder.mockReset();
+});
+
+// Mocking Modules
+describe('fetchData', () => {
+  test('should fetch users', async () => {
+    const resp = [{ id: 5 }];
+
+    axios.get.mockImplementation(() => Promise.resolve(resp));
+
+    const data = await fetchData();
+
+    return expect(data).toEqual(resp);
   });
 });
